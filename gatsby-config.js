@@ -1,4 +1,6 @@
 module.exports = {
+  // Using the default GitHub domain.
+  pathPrefix: "blog",
   siteMetadata: {
     title: `Gatsby Starter Blog`,
     author: `Kyle Mathews`,
