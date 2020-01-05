@@ -6,14 +6,27 @@
  */
 
 import React from "react"
-import PropTypes from "prop-types"
 import Helmet from "react-helmet"
 import { useStaticQuery, graphql } from "gatsby"
 
-function SEO({ description, lang, meta, title }) {
-  const { site } = useStaticQuery(
+import { SiteQueryQuery } from "../graphqlTypes"
+
+export type SeoProps = {
+  description?: string
+  lang?: string
+  meta?: Array<{ name: string; content: string }>
+  title: string
+}
+
+const Seo: React.FC<SeoProps> = ({
+  description,
+  lang = `en`,
+  meta = [],
+  title,
+}) => {
+  const { site }: SiteQueryQuery = useStaticQuery(
     graphql`
-      query {
+      query SiteQuery {
         site {
           siteMetadata {
             title
@@ -25,7 +38,7 @@ function SEO({ description, lang, meta, title }) {
     `
   )
 
-  const metaDescription = description || site.siteMetadata.description
+  const metaDescription = description ?? site?.siteMetadata?.description ?? ""
 
   return (
     <Helmet
@@ -33,7 +46,7 @@ function SEO({ description, lang, meta, title }) {
         lang,
       }}
       title={title}
-      titleTemplate={`%s | ${site.siteMetadata.title}`}
+      titleTemplate={`%s | ${site?.siteMetadata?.title ?? ""}`}
       meta={[
         {
           name: `description`,
@@ -57,7 +70,7 @@ function SEO({ description, lang, meta, title }) {
         },
         {
           name: `twitter:creator`,
-          content: site.siteMetadata.author,
+          content: site?.siteMetadata?.author ?? "",
         },
         {
           name: `twitter:title`,
@@ -72,17 +85,4 @@ function SEO({ description, lang, meta, title }) {
   )
 }
 
-SEO.defaultProps = {
-  lang: `en`,
-  meta: [],
-  description: ``,
-}
-
-SEO.propTypes = {
-  description: PropTypes.string,
-  lang: PropTypes.string,
-  meta: PropTypes.arrayOf(PropTypes.object),
-  title: PropTypes.string.isRequired,
-}
-
-export default SEO
+export default Seo

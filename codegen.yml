@@ -1,0 +1,15 @@
+schema: http://localhost:8000/___graphql
+documents:
+  - ./src/**/*.{ts,tsx}
+  - ./node_modules/gatsby-*/**/*.js
+generates:
+  ./src/graphqlTypes.ts:
+    config:
+      preResolveTypes: true
+      avoidOptionals: false
+      scalars:
+        DateTime: Date
+        JSON: { [key: string]: any }
+    plugins:
+      - typescript
+      - typescript-operations
